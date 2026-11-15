@@ -1,6 +1,6 @@
 # Job-hunt pipeline
 
-Route-free Core service: capture a posting, generate a tailored resume and cover
+The pipeline behind Armour Pursuit: capture a posting, generate a tailored resume and cover
 letter from your master resume, track every application's status, text you on
 every status change, and watch Gmail for bounce-backs.
 
@@ -29,16 +29,16 @@ Nothing submits an application unless you turn on `autoSubmit` (off by default).
    bounce monitor is off. US numbers need Twilio A2P 10DLC or toll-free
    verification before carriers deliver texts.
 
-## Use (from `app_build/server`)
+## Use (from the Armour Pursuit folder)
 
 ```
-npx ts-node jobhunt/cli.ts add https://boards.greenhouse.io/acme/jobs/123 --email recruiter@acme.com
-npx ts-node jobhunt/cli.ts tailor <id>        # writes resume.pdf/.md/.html, cover letter, report.json
-npx ts-node jobhunt/cli.ts approve <id>       # tailor a 65-79 or dream-company posting
-npx ts-node jobhunt/cli.ts status <id> applied
-npx ts-node jobhunt/cli.ts sent <id> "<message-id@mail.gmail.com>" recruiter@acme.com
-npx ts-node jobhunt/cli.ts watch 5            # bounce scan every 5 minutes
-npx ts-node jobhunt/cli.ts list
+npm run cli -- add https://boards.greenhouse.io/acme/jobs/123 --email recruiter@acme.com
+npm run cli -- tailor <id>        # writes resume.pdf/.md/.html, cover letter, report.json
+npm run cli -- approve <id>       # tailor a 65-79 or dream-company posting
+npm run cli -- status <id> applied
+npm run cli -- sent <id> "<message-id@mail.gmail.com>" recruiter@acme.com
+npm run cli -- watch 5            # bounce scan every 5 minutes
+npm run cli -- list
 ```
 
 ## Honesty guarantees
@@ -77,7 +77,7 @@ Optional preferences live in `data/jobhunt/preferences.json`:
 ## PDF gates
 
 The resume is printed to a Letter PDF with headless Chromium (puppeteer, already
-a Core dependency). If it runs over the page budget (1 by default), the
+already installed). If it runs over the page budget (1 by default), the
 lowest-relevance bullet is dropped and it re-renders, never removing a role's
 last bullet. The PDF text layer is then checked for standard section headers in
 order, the name and every employer, and no ligature glyphs. Results are in
@@ -115,16 +115,11 @@ Gmail scopes for everything: `gmail.readonly gmail.compose calendar.events`. Dra
 
 ## Command center
 
-Open `/command-center` in the Frontier app. Views: Dashboard, Board, Apply, Resume, Prep, Replies, LinkedIn, Controls, and a chat with a model of your choice using your own API key.
+Open `http://127.0.0.1:5196` after `npm start`. Views: Dashboard, Board, Apply, Resume, Prep, Replies, LinkedIn, Controls, and a chat with a model of your choice using your own API key.
 
 ### First run on your own computer
 
-1. Get the branch: `git fetch origin claude/project-thread-xrpzb0` then `git checkout claude/project-thread-xrpzb0`.
-2. Install (Node 24): `pnpm --dir app_build/frontier install --frozen-lockfile` and `npm --prefix app_build/server ci`.
-3. Optional, for texts and email: put the Twilio and Gmail lines from Setup above in `app_build/server/.env`. Without them the app still runs; updates show in the bell only.
-4. Start it: `npm run dev` from the repo root, then open `http://127.0.0.1:5196/command-center`.
-5. The setup form opens by itself. Type the resume in, or upload a JSON Resume file (it writes `app_build/server/data/jobhunt/master-resume.json`, which is gitignored), fill in the profile, finish.
-6. First thing to try: Apply, paste a posting address, then open Resume and Prep for that posting.
+See the README at the top of this repository. Short version: `npm install`, then `npm start`, then open `http://127.0.0.1:5196`.
 
 ### Views added after the first version
 
@@ -180,6 +175,6 @@ The page works at phone width. The pipeline itself (browser, database, files) st
 2. Make the computer reachable from the phone. Recommended: install Tailscale on both and run `tailscale serve --bg 5196` on the computer, then open `https://<computer>.<tailnet>.ts.net/command-center` on the phone. This is encrypted and limited to your own devices. Not checked in CI or here: the Tailscale step itself.
 3. Enter the passcode once per device (30-day session, 5 wrong tries locks for 15 minutes).
 
-From a phone you cannot change the model, its key, or phone access. Do not expose the dev server to a shared network (`--host 0.0.0.0`): that serves the whole Frontier app, unencrypted, to everyone on it.
+From a phone you cannot change the model, its key, or phone access. Do not expose the dev server to a shared network (`--host 0.0.0.0`): that serves the app, unencrypted, to everyone on it.
 
 Environment: `JOBHUNT_DATA_DIR` and `JOBHUNT_DB` move the data folder and database; `JOBHUNT_BROWSER_ARGS` adds Chrome flags for the live form.

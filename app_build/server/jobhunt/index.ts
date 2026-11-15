@@ -72,12 +72,19 @@ export interface JobHuntOptions {
   connectionsPath?: string;
 }
 
-/** Adapter over Core's configured LLM provider (lib/llm.ts). */
+/**
+ * The model connected in Controls, looked up each time it is needed.
+ * With no model connected the call fails, and tailoring and cover letters
+ * fall back to their no-model path (select and reorder only, template letter).
+ */
 export function coreGenerate(): GenerateText {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const llm = require('../lib/llm');
-  return (prompt, options = {}) =>
-    llm.complete([{ role: 'user', content: prompt }], { system: options.system, maxTokens: options.maxTokens ?? 1200, timeout: 90_000, temperature: 0.2 });
+  return async (prompt, options = {}) => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const agent = require('./agent');
+    const cfg = agent.loadAgentConfig(process.env.JOBHUNT_AGENT_CONFIG ?? join(DATA_DIR, 'agent.json'));
+    if (!cfg || (!cfg.apiKey && cfg.provider !== 'openai-compatible')) throw new Error('No model is connected.');
+    return agent.callModel(cfg, options.system ?? '', [{ role: 'user', content: prompt }]);
+  };
 }
 
 export function validateMasterResume(value: any): MasterResume {

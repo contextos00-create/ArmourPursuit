@@ -1,6 +1,6 @@
 import "@tanstack/react-start/server-only"
 import { getCookie, getRequestHeader, getRequestIP, setCookie } from "@tanstack/react-start/server"
-import { serverRequire } from "@/lib/contextos-server-bootstrap.server"
+import { serverRequire } from "../../lib/server-require.server"
 import type * as CommandCenter from "../../../../server/jobhunt/command-center"
 
 const COOKIE = "jh_session"

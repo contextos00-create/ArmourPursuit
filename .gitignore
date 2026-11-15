@@ -1,0 +1,21 @@
+# Dependencies and build products
+node_modules/
+dist/
+.output/
+.tanstack/
+.vite/
+coverage/
+*.tsbuildinfo
+*.log
+
+# Keys and credentials. Never commit these.
+.env
+.env.*
+!.env.example
+
+# Your own job search: resume, settings, model key, database, generated documents.
+app_build/server/data/
+app_build/frontier/.data/
+
+.DS_Store
+Thumbs.db

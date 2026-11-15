@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router"
 import { lazy, Suspense } from "react"
 
-const CommandCenter = lazy(() => import("@/features/jobhunt/CommandCenter"))
+const CommandCenter = lazy(() => import("../features/jobhunt/CommandCenter"))
 
 export const Route = createFileRoute("/command-center")({
   // Makes the page installable as an app on phones and desktops (see the web manifest).

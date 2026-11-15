@@ -177,7 +177,7 @@ export function renderTemplate(template: string, c: TemplateContext): string {
     time_line: when ? `${when} works for me, and I look forward to it.` : 'I am available [add two or three times that work].',
   };
   return template
-    .replace(/\{([a-z_]+)\}/g, (m, key: string) => (key in values ? values[key] : `[${key}]`))
+    .replace(/\{([a-z_]+)\}/g, (_m, key: string) => (key in values ? values[key] : `[${key}]`))
     .replace(/[ \t]+\n/g, '\n')
     .replace(/ {2,}/g, ' ')
     .replace(/\n{3,}/g, '\n\n')
