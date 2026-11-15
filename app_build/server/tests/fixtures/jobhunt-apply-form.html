@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Apply</title></head>
+<body>
+<!-- Shaped like a Greenhouse hosted form: label[for], required stars, file inputs, a select and a radio group. -->
+<form id="application_form" onsubmit="event.preventDefault(); document.body.innerHTML = '<h1>Thank you for applying!</h1><p>Your application has been submitted.</p>';">
+  <div class="field"><label for="first_name">First Name *</label><input id="first_name" name="first_name" required></div>
+  <div class="field"><label for="last_name">Last Name *</label><input id="last_name" name="last_name" required></div>
+  <div class="field"><label for="email">Email *</label><input id="email" type="email" required></div>
+  <div class="field"><label for="phone">Phone</label><input id="phone" type="tel"></div>
+  <div class="field"><label for="resume">Resume/CV *</label><input id="resume" type="file" required></div>
+  <div class="field"><label for="cover_letter">Cover Letter</label><input id="cover_letter" type="file"></div>
+  <div class="field"><label for="q1">LinkedIn Profile</label><input id="q1"></div>
+  <div class="field"><label for="q2">How did you hear about this job? *</label>
+    <select id="q2" required><option value="">Select...</option><option value="1">Company website</option><option value="2">LinkedIn</option><option value="3">Referral</option></select></div>
+  <fieldset><legend>Will you now or in the future require visa sponsorship? *</legend>
+    <label><input type="radio" name="sponsor" value="yes"> Yes</label>
+    <label><input type="radio" name="sponsor" value="no"> No</label></fieldset>
+  <div class="field"><label for="q4">Why do you want to work here?</label><textarea id="q4"></textarea></div>
+  <input type="hidden" name="token" value="x">
+  <button type="submit">Submit Application</button>
+</form>
+</body>
+</html>

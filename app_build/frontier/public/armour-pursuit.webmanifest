@@ -1,0 +1,17 @@
+{
+  "name": "Armour Pursuit",
+  "short_name": "Pursuit",
+  "description": "Your whole job search, handled.",
+  "id": "/command-center",
+  "start_url": "/command-center",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#0b7a4b",
+  "icons": [
+    { "src": "/armour-pursuit-192.png", "type": "image/png", "sizes": "192x192", "purpose": "any" },
+    { "src": "/armour-pursuit-512.png", "type": "image/png", "sizes": "512x512", "purpose": "any" },
+    { "src": "/armour-pursuit-maskable-512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+  ]
+}
