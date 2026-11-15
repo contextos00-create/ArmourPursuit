@@ -9,7 +9,7 @@ import { PrepPanel } from "./PrepPanel"
 import { RepliesPanel } from "./RepliesPanel"
 import { ResumePanel } from "./ResumePanel"
 import { SetupWizard } from "./SetupWizard"
-import { Icon, openDocument  } from "./ui"
+import { Icon, PageHead, openDocument  } from "./ui"
 import type {IconName} from "./ui";
 import {
   applyAgentProposal,
@@ -195,6 +195,12 @@ export default function CommandCenter() {
 
   const hasModel = state.config.hasKey || state.config.provider === "openai-compatible"
   const waiting = state.applications.filter((a) => a.needsApproval).length
+  const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
+  const apps = state.applications
+  const readyToSend = apps.filter((a) => a.canApply && !a.needsApproval).length
+  const talking = apps.filter((a) => ["assessment", "screening", "interviewing", "offer", "accepted"].includes(a.status)).length
+  const draftsReady = state.replies.queue.filter((d) => d.ready).length
+  const liveRoles = state.prep.filter((p) => p.live).length
 
   return (
     <main className="cc" data-tab={tab} data-full={full ? "1" : undefined}>
@@ -241,25 +247,46 @@ export default function CommandCenter() {
             <DashboardPanel state={state} onGo={go} onNotice={setNotice} />
           </div>
           <div className="cc-pane cc-scroll" hidden={tab !== "apply"}>
-            <ApplyPanel state={state} visible={tab === "apply"} onNotice={setNotice} onChanged={refresh} />
+            <div className="cc-page">
+              <PageHead eyebrow="Apply" title="You press Submit." detail={`${readyToSend} ready to send${waiting ? `, ${waiting} waiting for your OK` : ""}.`} />
+              <ApplyPanel state={state} visible={tab === "apply"} onNotice={setNotice} onChanged={refresh} />
+            </div>
           </div>
           <div className="cc-pane cc-scroll" hidden={tab !== "board"}>
-            <BoardPanel state={state} onNotice={setNotice} onChanged={refresh} onGo={go} />
+            <div className="cc-page">
+              <PageHead eyebrow="Board" title="Every application, by stage." detail={`${apps.length} tracked, ${talking} in conversation.`} />
+              <BoardPanel state={state} onNotice={setNotice} onChanged={refresh} onGo={go} />
+            </div>
           </div>
           <div className="cc-pane cc-scroll" hidden={tab !== "prep"}>
-            <PrepPanel state={state} onNotice={setNotice} onChanged={refresh} />
+            <div className="cc-page">
+              <PageHead eyebrow="Prep" title="Walk in ready." detail={liveRoles ? `${plural(liveRoles, "role", "roles")} at interview stage.` : "No interviews yet, so get ahead."} />
+              <PrepPanel state={state} onNotice={setNotice} onChanged={refresh} />
+            </div>
           </div>
           <div className="cc-pane cc-scroll" hidden={tab !== "resume"}>
-            <ResumePanel state={state} visible={tab === "resume"} onNotice={setNotice} onChanged={refresh} />
+            <div className="cc-page">
+              <PageHead eyebrow="Resume" title="One resume per posting." detail="Built only from your own lines." />
+              <ResumePanel state={state} visible={tab === "resume"} onNotice={setNotice} onChanged={refresh} />
+            </div>
           </div>
           <div className="cc-pane cc-scroll" hidden={tab !== "replies"}>
-            <RepliesPanel state={state} onNotice={setNotice} onChanged={refresh} />
+            <div className="cc-page">
+              <PageHead eyebrow="Replies" title="You press Send." detail={draftsReady ? `${plural(draftsReady, "draft", "drafts")} ready for you.` : "No drafts waiting."} />
+              <RepliesPanel state={state} onNotice={setNotice} onChanged={refresh} />
+            </div>
           </div>
           <div className="cc-pane cc-scroll" hidden={tab !== "network"}>
-            <NetworkPanel state={state} onNotice={setNotice} onChanged={refresh} />
+            <div className="cc-page">
+              <PageHead eyebrow="LinkedIn" title="People who can open a door." detail={`${state.network.atTracked} at companies you track.`} />
+              <NetworkPanel state={state} onNotice={setNotice} onChanged={refresh} />
+            </div>
           </div>
           <div className="cc-pane cc-scroll" hidden={tab !== "controls"}>
-            <ControlsPanel state={state} onNotice={setNotice} onChanged={refresh} onGo={go} onSetup={() => setSetupOpen(true)} />
+            <div className="cc-page">
+              <PageHead eyebrow="Controls" title="Your rules." detail={state.paused ? "Automation is paused." : "Automation is running."} />
+              <ControlsPanel state={state} onNotice={setNotice} onChanged={refresh} onGo={go} onSetup={() => setSetupOpen(true)} />
+            </div>
           </div>
         </section>
 

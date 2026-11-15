@@ -170,7 +170,7 @@ The command center is an installable web app (a PWA): its own icon and window on
 
 Limits, plainly: it is the same page in an app window, and it still talks to the computer running the pipeline, which must be on. There is no offline mode. Browsers only offer install over `https` or on `localhost`, so on a phone use the Tailscale address below. Not checked here: an actual install on any real device. Store apps (App Store, Google Play) and a packaged Windows program are not built.
 
-Colors: two neutrals (ink and paper) plus one accent (vermilion) for the single most important action or number on a screen. Green, amber and red appear only for good, warning and problem states.
+Colors: white surfaces with one green for actions, selection and progress, plus the app icon's near-black and cream for text and quiet surfaces. Charts and pipeline stages add blue, orange and yellow, always with a text label. Amber and red appear only for warning and problem states. No purple.
 
 ### On a phone
 

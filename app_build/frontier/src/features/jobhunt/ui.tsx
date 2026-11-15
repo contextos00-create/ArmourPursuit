@@ -48,6 +48,16 @@ export function Lever({ label, hint, value, min, max, step, unit, onChange, onCo
   )
 }
 
+/** The headline at the top of every screen: a short label, then one line that says where things stand. */
+export function PageHead({ eyebrow, title, detail }: { eyebrow: string; title: string; detail?: string }) {
+  return (
+    <header className="cc-page-head">
+      <p className="cc-page-eyebrow">{eyebrow}</p>
+      <h2 className="cc-page-title">{title}{detail ? <> <span>{detail}</span></> : null}</h2>
+    </header>
+  )
+}
+
 export function Ring({ share, size = 44, label }: { share: number; size?: number; label?: string }) {
   const r = 20
   const c = 2 * Math.PI * r

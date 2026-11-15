@@ -10,6 +10,7 @@ import {
   submitApplySession,
 } from "./jobhunt.functions"
 import type { CommandCenterState } from "./CommandCenter"
+import { Ring, STATUS_LABEL } from "./ui"
 
 type Row = CommandCenterState["applications"][number]
 type View = Awaited<ReturnType<typeof getApplySession>>
@@ -138,12 +139,18 @@ function AppRow({ row, busy, run, onNotice, onChanged }: { row: Row; busy: boole
   return (
     <li className="cc-app">
       <div className="cc-app-main">
-        <div>
+        {row.fit !== null && (
+          <span className="cc-app-fit" title="Fit score, 0 to 100">
+            <Ring share={row.fit / 100} size={52} />
+            <b>{row.fit}</b>
+          </span>
+        )}
+        <div className="cc-app-id">
           <strong>{row.company}</strong>
           <span className="cc-app-title">{row.title}</span>
-          <span className="cc-hint">{[row.location, row.fit !== null ? `fit ${row.fit}` : "", `code ${row.code}`].filter(Boolean).join(" · ")}</span>
+          <span className="cc-hint">{[row.location, `code ${row.code}`].filter(Boolean).join(" · ")}</span>
         </div>
-        <span className={`cc-status cc-status-${row.status}`}>{row.status}</span>
+        <span className={`cc-status cc-status-${row.status}`}>{STATUS_LABEL[row.status] ?? row.status}</span>
       </div>
       <div className="cc-app-actions">
         {row.needsApproval && <button type="button" disabled={busy} onClick={() => void run(() => applicationAction({ data: { id: row.id, action: "approve" } }))}>Approve</button>}
@@ -161,7 +168,7 @@ function AppRow({ row, busy, run, onNotice, onChanged }: { row: Row; busy: boole
             }}
           >
             <option value="">Mark as…</option>
-            {row.nextStatuses.map((s) => <option key={s} value={s}>{s}</option>)}
+            {row.nextStatuses.map((s) => <option key={s} value={s}>{STATUS_LABEL[s] ?? s}</option>)}
           </select>
         )}
       </div>

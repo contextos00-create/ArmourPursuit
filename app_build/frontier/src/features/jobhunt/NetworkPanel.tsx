@@ -50,6 +50,7 @@ export function NetworkPanel({ state, onNotice, onChanged }: { state: CommandCen
         <div className="cc-stat"><div><span className="cc-stat-v">{net.inQa}</span><span className="cc-stat-k">Connections in QA or testing</span></div></div>
       </div>
 
+      <div className="cc-net-pair">
       <section className="cc-card cc-net-import">
         <div className="cc-grow">
           <h3>{net.connections ? "Update your connections" : "Bring in your LinkedIn connections"}</h3>
@@ -75,8 +76,10 @@ export function NetworkPanel({ state, onNotice, onChanged }: { state: CommandCen
           </div>
         </section>
       )}
+      </div>
 
       {withPeople.length > 0 && <h2>People you know at companies you track</h2>}
+      <div className="cc-net-people">
       {withPeople.map((r) => (
         <section key={r.id} className="cc-card cc-net-row">
           <header className="cc-app-main">
@@ -97,6 +100,7 @@ export function NetworkPanel({ state, onNotice, onChanged }: { state: CommandCen
           <QuickLinks row={r} />
         </section>
       ))}
+      </div>
 
       {without.length > 0 && <h2>Quick connects</h2>}
       {without.length > 0 && (
